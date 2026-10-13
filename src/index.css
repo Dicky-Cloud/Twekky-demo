@@ -1,0 +1,44 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-white text-gray-900 font-sans text-[15px];
+  }
+  h1,
+  h2,
+  h3 {
+    @apply font-bold tracking-tight;
+  }
+}
+
+@layer components {
+  /* Small set of repeated patterns kept as components so JSX doesn't
+     have to repeat 8+ utility classes for the same button/card every time.
+     Everything else in the app is plain Tailwind utility classes. */
+  .btn {
+    @apply inline-flex items-center justify-center gap-1.5 rounded-lg px-4 py-2.5 text-sm font-semibold cursor-pointer transition-colors disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+  .btn-accent {
+    @apply btn border border-brand bg-white text-brand hover:bg-gray-100;
+  }
+  .btn-ghost {
+    @apply btn bg-transparent text-gray-900 border border-gray-200 hover:bg-gray-50;
+  }
+  .btn-white {
+    @apply btn bg-white text-brand hover:bg-gray-50;
+  }
+  .btn-sm {
+    @apply px-3 py-1.5 text-[13px];
+  }
+  .card {
+    @apply bg-white border border-gray-200 rounded-xl p-5 mb-4;
+  }
+  .field-input {
+    @apply w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-brand;
+  }
+  .field-label {
+    @apply text-[13px] text-gray-500 font-medium;
+  }
+}

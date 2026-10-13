@@ -1,0 +1,164 @@
+/* Gaya bubble bertema (lihat constants/bubbleThemes.js).
+   Warna datang dari variabel CSS yang diisi ThemedBubble, jadi satu aturan ini
+   melayani semua tema. Tema "polos" tidak memakai file ini sama sekali. */
+
+.tb {
+  position: relative;
+  background: var(--tb-bg);
+  color: var(--tb-text);
+  border: 2px solid var(--tb-border);
+  box-shadow: var(--tb-shadow, none);
+  border-radius: 18px;
+  box-sizing: border-box;
+}
+.tb-mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+
+/* ekor kecil seperti bubble bawaan: sudut bawah di sisi pengirim dibuat lancip */
+.tb-chat.tb-right { border-bottom-right-radius: 6px; }
+.tb-chat.tb-left { border-bottom-left-radius: 6px; }
+
+/* ruang untuk karakter yang mengintip di atas dan hiasan yang menjorok di bawah */
+.tb-has-mascot { margin-top: 32px; }
+.tb-has-decor { margin-bottom: 12px; }
+
+/* isi post di Feed: bubble selebar isinya, tata letak post tidak berubah */
+.tb-post {
+  display: block;
+  width: fit-content;
+  max-width: 100%;
+  padding: 10px 14px;
+  margin-bottom: 12px;
+}
+.tb-post.tb-has-decor { margin-bottom: 16px; }
+.tb-post.tb-compact { margin-bottom: 8px; }
+.tb-post.tb-compact.tb-has-decor { margin-bottom: 12px; }
+
+/* karakter */
+.tb-mascot {
+  position: absolute;
+  top: -30px;
+  width: 36px;
+  height: 36px;
+  overflow: visible;
+  pointer-events: none;
+}
+.tb-left .tb-mascot { left: 10px; }
+.tb-right .tb-mascot { right: 10px; }
+.tb-mascot * {
+  stroke: #111827;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.tb-mascot .e { stroke: none; fill: #111827; }
+
+/* hiasan */
+.tb-d {
+  position: absolute;
+  display: block;
+  width: 11px;
+  height: 11px;
+  pointer-events: none;
+  animation: tb-twinkle 2.2s ease-in-out infinite;
+}
+.tb-sl-sd { right: -12px; top: 7px; }
+.tb-sl-sl { left: -11px; bottom: 12px; }
+.tb-sl-bd { left: 34px; bottom: -9px; }
+.tb-sl-bd3 { right: 24px; bottom: -8px; }
+
+.tb-sh-star { clip-path: polygon(50% 0, 62% 38%, 100% 50%, 62% 62%, 50% 100%, 38% 62%, 0 50%, 38% 38%); }
+.tb-sh-dia { clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%); }
+.tb-sh-dot { border-radius: 50%; }
+.tb-sh-plus { clip-path: polygon(35% 0, 65% 0, 65% 35%, 100% 35%, 100% 65%, 65% 65%, 65% 100%, 35% 100%, 35% 65%, 0 65%, 0 35%, 35% 35%); }
+.tb-sh-leaf { border-radius: 0 100% 0 100%; }
+.tb-sh-bolt { clip-path: polygon(60% 0, 15% 55%, 45% 55%, 35% 100%, 85% 40%, 55% 40%); }
+.tb-sh-heart { clip-path: path("M5.5 10S0 6.5 0 3.5A3 3 0 0 1 5.5 2.4A3 3 0 0 1 11 3.5C11 6.5 5.5 10 5.5 10z"); }
+
+@keyframes tb-twinkle {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(0.7); opacity: 0.7; }
+}
+
+/* hormati pengaturan "kurangi gerakan" di perangkat pengguna */
+@media (prefers-reduced-motion: reduce) {
+  .tb-d { animation: none; }
+}
+
+/* ===== Feed: avatar, nama, dan kartu post penulis bertema ===== */
+
+/* Avatar: cincin gradien dengan jarak putih. Memakai pseudo-element di luar
+   avatar, jadi ukuran avatar dan tata letak baris tidak berubah. */
+.tb-av {
+  position: relative;
+  display: flex;
+  flex-shrink: 0;
+  isolation: isolate;
+  border-radius: 9999px;
+}
+.tb-av::before,
+.tb-av::after {
+  content: "";
+  position: absolute;
+  border-radius: 9999px;
+  z-index: 0;
+}
+.tb-av::before {
+  inset: -5px;
+  background: linear-gradient(135deg, var(--tb-ring1), var(--tb-ring2));
+}
+.tb-av::after {
+  inset: -2px;
+  background: #fff;
+}
+.tb-av > :first-child {
+  position: relative;
+  z-index: 1;
+}
+.tb-av-mascot {
+  position: absolute;
+  z-index: 2;
+  top: -14px;
+  right: -8px;
+  width: 24px;
+  height: 24px;
+  overflow: visible;
+  pointer-events: none;
+}
+.tb-av-mascot * {
+  stroke: #111827;
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.tb-av-mascot .e { stroke: none; fill: #111827; }
+
+/* bintang kecil di samping nama */
+.tb-spark {
+  position: relative;
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  margin-left: 6px;
+  vertical-align: 1px;
+}
+
+/* Kotak post bertema (hanya Feed): selebar baris Feed, garis di keempat sisi,
+   menyatu dengan garis pemisah (tanpa sudut membulat, margin, atau bayangan). Hanya post
+   penulis yang memilih gaya yang berwarna; post lain tetap baris datar biasa. */
+/* Kartu post Pro: tanpa latar dan border agar sama dengan post lain.
+   Hiasan di sudut (ThemeDecor) tetap tampil karena posisinya relatif terhadap kelas ini. */
+.tb-post-card {
+  position: relative;
+  margin: 0;
+  border: 0;
+  border-radius: 0;
+  background: none;
+  box-shadow: none;
+}
+/* hiasan di kanan, di kiri tombol laporkan yang muncul saat hover */
+.tb-post-card .tb-sl-sd { right: 58px; top: 16px; }
+.tb-post-card .tb-sl-sl { left: auto; bottom: auto; right: 80px; top: 26px; }
+.tb-post-card .tb-sl-bd { right: 44px; bottom: 16px; left: auto; }
+.tb-post-card .tb-sl-bd3 { right: 20px; bottom: 20px; }
